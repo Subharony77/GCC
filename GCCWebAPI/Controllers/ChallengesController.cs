@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace GCCWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/")]
     [ApiController]
     public class ChallengesController : ControllerBase
     {

@@ -11,7 +11,7 @@ namespace GCCWebAPI.ProcessorForAllQuestions
         {
             var listToReturn = new List<int>();
 
-            foreach (var file in requestFileString.Files) {
+            foreach (var file in requestFileString.inputs) {
                 var largestLen = CalculatelargestPallindrome(file);
                 listToReturn.Add(largestLen);
 
