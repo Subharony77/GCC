@@ -170,5 +170,90 @@ namespace GCCWebAPI.ProcessorForAllQuestions
         }
 
 
+
+        public ResponseDataEncryption dataEncrypt(RequestDataEncryption requestDataEncryption)
+        {
+            List<string> resultSet = new List<string>();
+            foreach (var s in requestDataEncryption.inputs)
+            {
+                string t = "";
+                int count = 0;
+                int n, m;
+                for (int i = 0; i < s.Length; i++)
+                {
+                    if (char.IsLetter(s[i]))
+                    {
+                        t += s[i];
+                        count++;
+                    }
+                }
+
+                Console.WriteLine(t);
+
+                int ceiloflength = (int)Math.Ceiling(Math.Sqrt(t.Length));
+                int flooroflength = (int)Math.Floor(Math.Sqrt(t.Length));
+
+                if (ceiloflength * flooroflength == t.Length)
+                {
+                    n = flooroflength;
+                    m = ceiloflength;
+                }
+                else
+                {
+                    n = m = ceiloflength;
+                }
+
+                int x = 0;
+                char[,] arr = new char[n, m];
+
+                //Console.WriteLine();
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < m; j++)
+                    {
+                        if (x == t.Length)
+                        {
+                            arr[i, j] = ' ';
+                        }
+                        else
+                        {
+                            arr[i, j] = t[x++];
+                        }
+                    }
+                }
+
+                //for (int i = 0; i < n; i++)
+                //{
+                //    for (int j = 0; j < m; j++)
+                //    {
+                //        Console.Write(arr[i, j]);
+                //    }
+                //    Console.WriteLine();
+                //}
+
+                //Console.WriteLine();
+                string result = "";
+                for (int i = 0; i < m; i++)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        if (arr[j, i] != ' ')
+                        {
+                            result += arr[j, i];
+                        }
+                    }
+                    result += ' ';
+                }
+
+                result = result.TrimEnd();
+                resultSet.Add(result);
+            }
+
+            var newObj = new ResponseDataEncryption();
+            newObj.answer = resultSet;
+            return newObj;
+        }
+
+
     }
 }

@@ -36,5 +36,14 @@ namespace GCCWebAPI.Controllers
             return response;
         }
 
+        [HttpPost]
+        [Route("data-encryption")]
+        public ResponseDataEncryption DataEncryption([FromBody] RequestDataEncryption requestDataEncryption)
+        {
+            var response = ProcessorForAllQuestions.dataEncrypt(requestDataEncryption);
+
+            return response;
+        }
+
     }
 }
