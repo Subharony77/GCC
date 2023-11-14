@@ -54,5 +54,23 @@ namespace GCCWebAPI.Controllers
             return response;
         }
 
+        [HttpPost]
+        [Route("risk-mitigation")]
+        public responsePortfolio RiskManagement([FromBody] RequestPortfolio requestinputsRisk)
+        {
+            var response = ProcessorForAllQuestions.calculateRisk(requestinputsRisk);
+
+            return response;
+        }
+
+        [HttpPost]
+        [Route("TI")]
+        public ResponseTimeIntervals TI([FromBody] RequestTimeIntervals requestTimeIntervals)
+        {
+            var response = ProcessorForAllQuestions.timeIntervals(requestTimeIntervals);
+            return response;
+        }
+
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using GCCWebAPI.RequestObjects;
 using GCCWebAPI.ResponseObjects;
+using System;
 
 namespace GCCWebAPI.ProcessorForAllQuestions
 {
@@ -328,6 +329,157 @@ namespace GCCWebAPI.ProcessorForAllQuestions
             return newObj;
         }
 
+        //Question Risk mitigation 
 
+
+        public responsePortfolio calculateRisk(RequestPortfolio requestPortfolio)
+        {
+
+            List<int> resultSet = new List<int>();
+
+            foreach (List<string> list in requestPortfolio.inputs)
+            {
+                var numberarrays = new List<List<int>>();
+                foreach (string s in list)
+                {
+                    var numbersList = new List<int>();
+                    string[] numberStrings = s.Split(' ');
+
+                    int[] numbersArray = Array.ConvertAll(numberStrings, int.Parse);
+                    numbersList = numberStrings.Select(int.Parse).ToList();
+                    numberarrays.Add(numbersList);
+                }
+
+                var n = numberarrays[0][0];
+                var m = numberarrays[0][1];
+                var costs = numberarrays[1];
+
+                Console.WriteLine(numberarrays);
+                var result = MaximizeRiskMitigation(n, m, costs);
+                resultSet.Add(result);
+            }
+
+            var newObj = new responsePortfolio();
+            newObj.answer = resultSet;
+            return newObj;
+
+
+        }
+        public int MaximizeRiskMitigation(int n, int m, List<int> costs)
+        {
+            
+            var maxi = 0;
+            var maxj=-1;
+            var sum = 0;
+
+            while(n!=0)
+            {
+                int maxRiskMitigated = 0;
+                for (int i = maxj+1; i < m; i++)
+                {
+                    for (int j = i; j < m; j++)
+                    {
+                       
+                            int riskMitigated = costs[j] - costs[i];
+                            maxRiskMitigated = Math.Max(maxRiskMitigated, riskMitigated);
+                            if(maxRiskMitigated == riskMitigated)
+                            {
+                                maxi=i; 
+                            }
+                            else
+                            {
+                                maxj=j;
+                            }
+                        
+                    }
+                }
+                n--;
+                 sum+= maxRiskMitigated;
+
+            }            
+
+            return sum;
+        }
+
+        //time intervals
+        public ResponseTimeIntervals timeIntervals(RequestTimeIntervals requestTimeIntervals)
+        {
+            List<List<string>> resultSet = new List<List<string>>();
+            foreach (List<string> input in requestTimeIntervals.inputs)
+            {
+                List<string> names = new List<string>();
+                var numberarrays = new List<List<int>>();
+                var num = int.Parse(input[0]);
+                HashSet<int> intervalsSet = new HashSet<int>();
+                names = input[1].Split(" ").ToList();
+                for (int i = 2; i < num+2; i++)
+                {
+                    var numbersList = new List<int>();
+                    string[] numberStrings = input[i].Split(' ');
+
+                    int[] numbersArray = Array.ConvertAll(numberStrings, int.Parse);
+                    numbersList = numberStrings.Select(int.Parse).ToList();
+                    foreach (int number in numbersList)
+                    {
+                        intervalsSet.Add(number);
+                    }
+                    numberarrays.Add(numbersList);
+                }
+                var intervals = intervalsSet.ToList();
+                intervals.Sort();
+                var result = getOverlappingIntervals(intervals, names, numberarrays);
+                
+                resultSet.Add(result);
+            }
+            var newObj = new ResponseTimeIntervals();
+            newObj.answer = resultSet;
+            return newObj;
+        }
+        public List<string> getOverlappingIntervals(List<int> intervals, List<string> names, List<List<int>> timeShifts)
+        {
+            Dictionary<int, List<string>> mapPeopleToIntervals = new Dictionary<int, List<string>>();
+            List<string> resultSet = new List<string> ();
+            resultSet.Add((intervals.Count()-1).ToString());
+            for (int j = 0; j < intervals.Count()-1; j++)
+            {
+
+                mapPeopleToIntervals[j] = new List<string>();
+
+            }
+            for (int i = 0; i < timeShifts.Count(); i++)
+            {
+                var n1 = timeShifts[i][0];
+                var n2 = timeShifts[i][1];
+                var index1 = intervals.IndexOf(n1);
+                var index2 = intervals.IndexOf(n2);
+       
+
+                for (int j = index1; j < index2; j++)
+                {
+                  
+                        mapPeopleToIntervals[j].Add(names[i]);
+                    
+                }
+            }
+            int index = 0;
+            foreach (var entry in mapPeopleToIntervals)
+            {
+                entry.Value.Sort();
+            }
+            
+            foreach (var entry in mapPeopleToIntervals)
+            {
+                string result = "";
+                //result += (intervals.Count() - 1).ToString() + " ";
+                result += intervals[index].ToString() + " " + intervals[++index].ToString() + " " + entry.Value.Count() + " " + string.Join(" ", entry.Value);
+                resultSet.Add(result);
+            }
+            return resultSet;
+        }
     }
+
+
+
+
 }
+
