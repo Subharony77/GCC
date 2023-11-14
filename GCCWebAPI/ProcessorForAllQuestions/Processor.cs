@@ -355,7 +355,7 @@ namespace GCCWebAPI.ProcessorForAllQuestions
                 var costs = numberarrays[1];
 
                 Console.WriteLine(numberarrays);
-                var result = MaximizeRiskMitigation(n, m, costs);
+                var result = MaxProfit(0,1,n, costs,m);
                 resultSet.Add(result);
             }
 
@@ -365,41 +365,22 @@ namespace GCCWebAPI.ProcessorForAllQuestions
 
 
         }
-        public int MaximizeRiskMitigation(int n, int m, List<int> costs)
+
+        public int MaxProfit(int ind, int start, int cap, List<int> costs, int n)
         {
-            
-            var maxi = 0;
-            var maxj=-1;
-            var sum = 0;
+            if (ind == n || cap == 0)
+                return 0;
 
-            while(n!=0)
+            if (start == 1)
             {
-                int maxRiskMitigated = 0;
-                for (int i = maxj+1; i < m; i++)
-                {
-                    for (int j = i; j < m; j++)
-                    {
-                       
-                            int riskMitigated = costs[j] - costs[i];
-                            maxRiskMitigated = Math.Max(maxRiskMitigated, riskMitigated);
-                            if(maxRiskMitigated == riskMitigated)
-                            {
-                                maxi=i; 
-                            }
-                            else
-                            {
-                                maxj=j;
-                            }
-                        
-                    }
-                }
-                n--;
-                 sum+= maxRiskMitigated;
+                return Math.Max(-costs[ind] + MaxProfit(ind + 1, 0, cap, costs, n),
+                                 0 + MaxProfit(ind + 1, 1, cap, costs, n));
+            }
 
-            }            
-
-            return sum;
+            return Math.Max(costs[ind] + MaxProfit(ind + 1, 1, cap - 1, costs, n),
+                             0 + MaxProfit(ind + 1, 0, cap, costs, n));
         }
+
 
         //time intervals
         public ResponseTimeIntervals timeIntervals(RequestTimeIntervals requestTimeIntervals)
