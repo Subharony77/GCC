@@ -172,10 +172,10 @@ namespace GCCWebAPI.ProcessorForAllQuestions
         //question CoinChange
 
 
-        public responsePortfolio caluculateCoinChange(RequestPortfolio requestPortfolio)
+        public ResponseCoinChange caluculateCoinChange(RequestPortfolio requestPortfolio)
         {
 
-            List<int> resultSet = new List<int>();
+            List<long> resultSet = new List<long>();
 
             foreach (List<string> list in requestPortfolio.inputs)
             {
@@ -196,17 +196,17 @@ namespace GCCWebAPI.ProcessorForAllQuestions
 
                 Console.WriteLine(numberarrays);
 
-                int result = Change(amount, coins);
+                var result = Change(amount, coins);
                 resultSet.Add(result);
             }
 
-            var newObj = new responsePortfolio();
+            var newObj = new ResponseCoinChange();
             newObj.answer = resultSet;
             return newObj;
 
 
         }
-        public int Change(int amount, List<int> coins)
+        public long Change(int amount, List<int> coins)
         {
             if (amount == 0)
                 return 1;
@@ -215,7 +215,7 @@ namespace GCCWebAPI.ProcessorForAllQuestions
 
             int m = coins.Count();
             int n = amount;
-            int[,] dp = new int[m + 1, n + 1];
+            long[,] dp = new long[m + 1, n + 1];
 
             dp[0, 0] = 1;
 

@@ -38,7 +38,7 @@ namespace GCCWebAPI.Controllers
 
         [HttpPost]
         [Route("coin-change")]
-        public responsePortfolio CoinChange([FromBody] RequestPortfolio requestPortfolio)
+        public ResponseCoinChange CoinChange([FromBody] RequestPortfolio requestPortfolio)
         {
             var response = ProcessorForAllQuestions.caluculateCoinChange(requestPortfolio);
 
