@@ -5,5 +5,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <ActiveDebugProfile>GCCWebAPI</ActiveDebugProfile>
+    <NameOfLastUsedPublishProfile>C:\Users\91943\Desktop\GCCProject\GCC\GCCWebAPI\Properties\PublishProfiles\GCCWebAPI20231113171832 - Web Deploy.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>

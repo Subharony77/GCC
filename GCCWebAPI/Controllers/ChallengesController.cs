@@ -27,5 +27,14 @@ namespace GCCWebAPI.Controllers
             return response;
         }
 
+        [HttpPost]
+        [Route("portfolio-operations")]
+        public responsePortfolio PortfolioAccount([FromBody] RequestPortfolio requestPortfolio)
+        {
+            var response = ProcessorForAllQuestions.portfolioAcc(requestPortfolio);
+
+            return response;
+        }
+
     }
 }
