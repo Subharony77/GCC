@@ -64,7 +64,7 @@ namespace GCCWebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("TI")]
+        [Route("time-intervals")]
         public ResponseTimeIntervals TI([FromBody] RequestTimeIntervals requestTimeIntervals)
         {
             var response = ProcessorForAllQuestions.timeIntervals(requestTimeIntervals);
