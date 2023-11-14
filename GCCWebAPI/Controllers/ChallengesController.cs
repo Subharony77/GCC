@@ -37,6 +37,15 @@ namespace GCCWebAPI.Controllers
         }
 
         [HttpPost]
+        [Route("coin-change")]
+        public responsePortfolio CoinChange([FromBody] RequestPortfolio requestPortfolio)
+        {
+            var response = ProcessorForAllQuestions.caluculateCoinChange(requestPortfolio);
+
+            return response;
+        }
+
+        [HttpPost]
         [Route("data-encryption")]
         public ResponseDataEncryption DataEncryption([FromBody] RequestDataEncryption requestDataEncryption)
         {

@@ -169,6 +169,80 @@ namespace GCCWebAPI.ProcessorForAllQuestions
 
         }
 
+        //question CoinChange
+
+
+        public responsePortfolio caluculateCoinChange(RequestPortfolio requestPortfolio)
+        {
+
+            List<int> resultSet = new List<int>();
+
+            foreach (List<string> list in requestPortfolio.inputs)
+            {
+                var numberarrays = new List<List<int>>();
+                foreach (string s in list)
+                {
+                    var numbersList = new List<int>();
+                    string[] numberStrings = s.Split(' ');
+
+                    int[] numbersArray = Array.ConvertAll(numberStrings, int.Parse);
+                    numbersList = numberStrings.Select(int.Parse).ToList();
+                    numberarrays.Add(numbersList);
+                }
+
+
+                var amount = numberarrays[0][0];
+                var coins = numberarrays[1];
+
+                Console.WriteLine(numberarrays);
+
+                int result = Change(amount, coins);
+                resultSet.Add(result);
+            }
+
+            var newObj = new responsePortfolio();
+            newObj.answer = resultSet;
+            return newObj;
+
+
+        }
+        public int Change(int amount, List<int> coins)
+        {
+            if (amount == 0)
+                return 1;
+            if (coins.Count() == 0)
+                return 0;
+
+            int m = coins.Count();
+            int n = amount;
+            int[,] dp = new int[m + 1, n + 1];
+
+            dp[0, 0] = 1;
+
+            for (int i = 1; i <= n; i++)
+            {
+                dp[0, i] = 0;
+            }
+
+            for (int i = 1; i <= m; i++)
+            {
+                dp[i, 0] = 1;
+            }
+
+            for (int i = 1; i <= m; i++)
+            {
+                for (int j = 1; j <= n; j++)
+                {
+                    if (j - coins[i - 1] >= 0)
+                        dp[i, j] = dp[i, j - coins[i - 1]] + dp[i - 1, j];
+                    else
+                        dp[i, j] = dp[i - 1, j];
+                }
+            }
+
+            return dp[m, n];
+        }
+
 
 
         public ResponseDataEncryption dataEncrypt(RequestDataEncryption requestDataEncryption)
