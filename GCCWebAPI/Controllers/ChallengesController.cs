@@ -78,7 +78,13 @@ namespace GCCWebAPI.Controllers
             var response = ProcessorForAllQuestions.ProfMax(requestMaxProf);
             return response;
         }
-
+        [HttpPost]
+        [Route("mlmm-program")]
+        public responsePortfolio MLMM([FromBody] RequestPortfolio requestPortfolio)
+        {
+            var response = ProcessorForAllQuestions.MLMM(requestPortfolio);
+            return response;
+        }
 
     }
 }

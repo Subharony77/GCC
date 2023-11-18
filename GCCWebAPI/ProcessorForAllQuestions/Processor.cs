@@ -507,7 +507,7 @@ namespace GCCWebAPI.ProcessorForAllQuestions
                 int[] newArray = new int[integerList.Length - 1];
                 Array.Copy(integerList, 1, newArray, 0, newArray.Length);
 
-                var result = MaxProfit(newArray);
+                var result = MaxProfitforqs(newArray);
 
 
                 //List<string> names = new List<string>();
@@ -539,7 +539,7 @@ namespace GCCWebAPI.ProcessorForAllQuestions
             return newObj;
         }
 
-        public int MaxProfit(int[] prices)
+        public int MaxProfitforqs(int[] prices)
         {
             if (prices == null || prices.Length == 0)
                 return 0;
@@ -554,6 +554,79 @@ namespace GCCWebAPI.ProcessorForAllQuestions
             }
 
             return res[prices.Length - 1];
+        }
+
+        //MLMM
+
+        public responsePortfolio MLMM(RequestPortfolio requestPortfolio)
+        {
+
+            List<int> resultSet = new List<int>();
+
+            foreach (List<string> list in requestPortfolio.inputs)
+            {
+                var numberarrays = new List<List<int>>();
+                foreach (string s in list)
+                {
+                    var numbersList = new List<int>();
+                    string[] numberStrings = s.Split(' ');
+
+                    int[] numbersArray = Array.ConvertAll(numberStrings, int.Parse);
+                    numbersList = numberStrings.Select(int.Parse).ToList();
+                    numberarrays.Add(numbersList);
+                }
+
+                var k = numberarrays[0][0];
+                var nums = numberarrays[2].ToArray();
+
+                HashSet<int> integerHashSet = new HashSet<int>(numberarrays[2]);
+                int result = CountSubarrays(integerHashSet.ToArray(),k);
+
+                
+                //foreach(int i in integerHashSet)
+                //{
+                //    if (i < k)
+                //        result++;
+
+                //}
+
+                resultSet.Add(result);
+            }
+
+
+
+            var newObj = new responsePortfolio();
+            newObj.answer = resultSet;
+            return newObj;
+
+        }
+
+        public int CountSubarrays(int[] nums, int k)
+        {
+            //var list = new List<int>(nums);
+            //var count = 0;
+            //for (var i = 0; i < list.Count; i++)
+            //{
+            //    for (var j = i + 1; j < list.Count; j++)
+            //    {
+            //        if (nums[i] + nums[j] < k)
+            //            count++;
+            //    }
+            //}
+            //return count;
+
+            int left = 0, right = 0, result = 0, product = 0;
+
+            while (right < nums.Length)
+            {
+                product += nums[right];
+                while (left <= right && product >= k)
+                    product -= nums[left++];
+                result += (right - left + 1);
+                right++;
+            }
+
+            return result;
         }
 
 
