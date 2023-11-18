@@ -71,6 +71,14 @@ namespace GCCWebAPI.Controllers
             return response;
         }
 
+        [HttpPost]
+        [Route("profit-maximization")]
+        public FileRearrangeResponse ProfMax([FromBody] RequestMaxProf requestMaxProf)
+        {
+            var response = ProcessorForAllQuestions.ProfMax(requestMaxProf);
+            return response;
+        }
+
 
     }
 }

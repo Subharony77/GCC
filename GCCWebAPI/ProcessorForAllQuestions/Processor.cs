@@ -6,7 +6,7 @@ namespace GCCWebAPI.ProcessorForAllQuestions
 {
     public class Processor
     {
-       
+
 
         public Processor() { }
 
@@ -15,18 +15,19 @@ namespace GCCWebAPI.ProcessorForAllQuestions
         {
             var listToReturn = new List<int>();
 
-            foreach (var file in requestFileString.inputs) {
+            foreach (var file in requestFileString.inputs)
+            {
                 var largestLen = CalculatelargestPallindrome(file);
                 listToReturn.Add(largestLen);
 
             }
 
             var newObject = new FileRearrangeResponse();
-            newObject.answer = listToReturn;    
-            return newObject;    
+            newObject.answer = listToReturn;
+            return newObject;
         }
 
-        public  int CalculatelargestPallindrome(string FileName)
+        public int CalculatelargestPallindrome(string FileName)
         {
             // Counting the occurrences of each character in the string
             Dictionary<char, int> noOfOccurrance = new Dictionary<char, int>();
@@ -49,7 +50,7 @@ namespace GCCWebAPI.ProcessorForAllQuestions
             {
                 len += (count / 2) * 2;
 
-                 //if odd count then only one is added to oddcount. e.g if it is 5 then 4 will be considered and plus 1 
+                //if odd count then only one is added to oddcount. e.g if it is 5 then 4 will be considered and plus 1 
                 if (count % 2 != 0)
                 {
                     oddCount = 1;
@@ -63,14 +64,14 @@ namespace GCCWebAPI.ProcessorForAllQuestions
         }
 
         //Question : Portfolio operations
-       
+
         public responsePortfolio portfolioAcc(RequestPortfolio requestPortfolio)
         {
             int maxsum = 0;
-            
+
             List<int> resultSet = new List<int>();
 
-            foreach(List<string> list in requestPortfolio.inputs)
+            foreach (List<string> list in requestPortfolio.inputs)
             {
                 var numberarrays = new List<List<int>>();
                 foreach (string s in list)
@@ -82,7 +83,7 @@ namespace GCCWebAPI.ProcessorForAllQuestions
                     numbersList = numberStrings.Select(int.Parse).ToList();
                     numberarrays.Add(numbersList);
                 }
-                
+
 
                 var arr2 = numberarrays[1];
                 var arr3 = numberarrays[2];
@@ -155,7 +156,7 @@ namespace GCCWebAPI.ProcessorForAllQuestions
                     result++;
                 }
             }
-            if (j != arr3.Count() -1)
+            if (j != arr3.Count() - 1)
             {
                 while (sum1 <= maxsum && j <= arr3.Count() - 1)
                 {
@@ -166,7 +167,7 @@ namespace GCCWebAPI.ProcessorForAllQuestions
 
 
             return result;
-        
+
 
         }
 
@@ -355,7 +356,7 @@ namespace GCCWebAPI.ProcessorForAllQuestions
                 var costs = numberarrays[1];
 
                 Console.WriteLine(numberarrays);
-                var result = MaxProfit(0,1,n, costs,m);
+                var result = MaxProfit(0, 1, n, costs, m);
                 resultSet.Add(result);
             }
 
@@ -393,7 +394,7 @@ namespace GCCWebAPI.ProcessorForAllQuestions
                 var num = int.Parse(input[0]);
                 HashSet<int> intervalsSet = new HashSet<int>();
                 names = input[1].Split(" ").ToList();
-                for (int i = 2; i < num+2; i++)
+                for (int i = 2; i < num + 2; i++)
                 {
                     var numbersList = new List<int>();
                     string[] numberStrings = input[i].Split(' ');
@@ -409,7 +410,7 @@ namespace GCCWebAPI.ProcessorForAllQuestions
                 var intervals = intervalsSet.ToList();
                 intervals.Sort();
                 var result = getOverlappingIntervals(intervals, names, numberarrays);
-                
+
                 resultSet.Add(result);
             }
             var newObj = new ResponseTimeIntervals();
@@ -419,9 +420,9 @@ namespace GCCWebAPI.ProcessorForAllQuestions
         public List<string> getOverlappingIntervals(List<int> intervals, List<string> names, List<List<int>> timeShifts)
         {
             Dictionary<int, List<string>> mapPeopleToIntervals = new Dictionary<int, List<string>>();
-            List<string> resultSet = new List<string> ();
-            resultSet.Add((intervals.Count()-1).ToString());
-            for (int j = 0; j < intervals.Count()-1; j++)
+            List<string> resultSet = new List<string>();
+            resultSet.Add((intervals.Count() - 1).ToString());
+            for (int j = 0; j < intervals.Count() - 1; j++)
             {
 
                 mapPeopleToIntervals[j] = new List<string>();
@@ -433,13 +434,13 @@ namespace GCCWebAPI.ProcessorForAllQuestions
                 var n2 = timeShifts[i][1];
                 var index1 = intervals.IndexOf(n1);
                 var index2 = intervals.IndexOf(n2);
-       
+
 
                 for (int j = index1; j < index2; j++)
                 {
-                  
-                        mapPeopleToIntervals[j].Add(names[i]);
-                    
+
+                    mapPeopleToIntervals[j].Add(names[i]);
+
                 }
             }
             int index = 0;
@@ -447,7 +448,7 @@ namespace GCCWebAPI.ProcessorForAllQuestions
             {
                 entry.Value.Sort();
             }
-            
+
             foreach (var entry in mapPeopleToIntervals)
             {
                 string result = "";
@@ -457,10 +458,72 @@ namespace GCCWebAPI.ProcessorForAllQuestions
             }
             return resultSet;
         }
+
+        //Profit maximization 
+
+
+
+        public FileRearrangeResponse ProfMax(RequestMaxProf requestMaxProf)
+        {
+            List<int> resultSet = new List<int>();
+            foreach (string input in requestMaxProf.inputs)
+            {
+                int[] integerList = input.Split(' ').Select(int.Parse).ToArray();
+                int[] newArray = new int[integerList.Length - 1];
+                Array.Copy(integerList, 1, newArray, 0, newArray.Length);
+
+                var result = MaxProfit(newArray);
+
+
+                //List<string> names = new List<string>();
+                //var numberarrays = new List<List<int>>();
+                //var num = int.Parse(input[0]);
+                //HashSet<int> intervalsSet = new HashSet<int>();
+                //names = input[1].Split(" ").ToList();
+                //for (int i = 2; i < num + 2; i++)
+                //{
+                //    var numbersList = new List<int>();
+                //    string[] numberStrings = input[i].Split(' ');
+
+                //    int[] numbersArray = Array.ConvertAll(numberStrings, int.Parse);
+                //    numbersList = numberStrings.Select(int.Parse).ToList();
+                //    foreach (int number in numbersList)
+                //    {
+                //        intervalsSet.Add(number);
+                //    }
+                //    numberarrays.Add(numbersList);
+                //}
+                //var intervals = intervalsSet.ToList();
+                //intervals.Sort();
+                //var result = getOverlappingIntervals(intervals, names, numberarrays);
+
+                resultSet.Add(result);
+            }
+            var newObj = new FileRearrangeResponse();
+            newObj.answer = resultSet;
+            return newObj;
+        }
+
+        public int MaxProfit(int[] prices)
+        {
+            if (prices == null || prices.Length == 0)
+                return 0;
+
+            int[] res = new int[prices.Length];
+            int diff = -prices[0];
+
+            for (int i = 1; i < prices.Length; i++)
+            {
+                res[i] = Math.Max(res[i - 1], prices[i] + diff);
+                diff = Math.Max(diff, -prices[i]);
+            }
+
+            return res[prices.Length - 1];
+        }
+
+
     }
-
-
-
-
 }
+
+
 
