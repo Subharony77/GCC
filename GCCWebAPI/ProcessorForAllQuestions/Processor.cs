@@ -84,12 +84,12 @@ namespace GCCWebAPI.ProcessorForAllQuestions
                 }
                 
 
-                var arr2 = numberarrays[1];
-                var arr3 = numberarrays[2];
+                var arr1 = numberarrays[1];
+                var arr2 = numberarrays[2];
                 maxsum = numberarrays[0][2];
                 Console.WriteLine(numberarrays);
 
-                int result = getEarnings(arr2, arr3, maxsum);
+                int result = getEarnings(arr1.ToArray(), arr2.ToArray(), maxsum);
                 resultSet.Add(result);
             }
 
@@ -98,76 +98,109 @@ namespace GCCWebAPI.ProcessorForAllQuestions
             return newObj;
 
         }
-        public int getEarnings(List<int> arr2, List<int> arr3, int maxsum)
+        public int getEarnings(int[] a, int[] b, int maxSum)
         {
+            //List<int> sumArr1 = new List<int>();
+            //List<int> sumArr2 = new List<int>();
+            //sumArr1.Add(arr1[0]);
+            //sumArr2.Add(arr2[0]);
+            //for (int i = 1; i < arr1.Count(); i++)
+            //{
+            //    sumArr1.Add(arr1[i] + sumArr1[i - 1]);
+            //}
 
-            var minSizeArr = 0;
-            var counter = 0;
-            var i = 0;
-            var j = 0;
+            //for (int j = 1; j < arr2.Count(); j++)
+            //{
+            //    sumArr2.Add(arr2[j] + sumArr2[j - 1]);
+            //}
 
-            int sum1 = 0;
-            int result = 0;
+            //int arr2Index = arr2.Count() - 1;
+            //int arr1Index = arr1.Count() - 1;
 
-            if (arr2.Count() < arr3.Count())
+            //while ((sumArr1[arr1Index] > maxsum))
+            //{
+            //    arr1Index--;
+            //    if (arr1Index < 0)
+            //        break;
+            //}
+
+            //while ((sumArr2[arr2Index] > maxsum) )
+            //{
+            //    arr2Index--;
+            //    if (arr2Index < 0)
+            //        break;
+            //}
+
+            //if(arr1Index < 0 && arr2Index < 0)
+            //{
+            //    return 0;
+            //}
+
+            //if(arr1Index <0 )
+            //{
+            //    return arr2Index + 1;
+            //}
+
+            //if( arr2Index < 0 )
+            //{
+            //    return arr1Index + 1;
+            //}
+            //int currSum = sumArr1[arr1Index] + sumArr2[arr2Index];
+
+            //while (currSum > maxsum)
+            //{
+            //    if (arr1[arr1Index] > arr2[arr2Index])
+            //    {
+            //        arr1Index--;
+            //        if(arr1Index < 0) { break; }
+            //    }
+            //    else
+            //    {
+            //        arr2Index--;
+            //        if (arr2Index < 0) { break; }
+            //    }
+            //    currSum = sumArr1[arr1Index] + sumArr2[arr2Index];
+            //}
+
+            //return (arr1Index + arr2Index + 2);
+
+            int i = 0, j = 0, currSum = 0, maxCount = 0;
+
+            while (i < a.Length && currSum + a[i] <= maxSum)
             {
-                minSizeArr = arr2.Count();
+                currSum += a[i];
+                i++;
+            }
+
+            if (currSum > maxSum)
+            {
+                i--;
+                maxCount = Math.Max(maxCount, i);
             }
             else
             {
-                minSizeArr = arr3.Count();
+                maxCount = Math.Max(maxCount, i);
+                i--;
             }
-            while (true)
+
+            while (j < b.Length && currSum <= maxSum)
             {
-                if (i > arr2.Count() - 1 || j > arr3.Count() - 1)
-                {
-                    break;
-                }
-                var a = arr2[i];
-                var b = arr3[j];
-                if (a < b)
-                {
-                    sum1 += a;
-                    result += 1;
-                    i += 1;
+                currSum += b[j];
+                j++;
 
-                }
-                else
+                while (currSum > maxSum && i >= 0)
                 {
-                    sum1 += b;
-                    result += 1;
-                    j += 1;
+                    currSum -= a[i];
+                    i--;
+                }
 
-                }
-                //counter += 1;
-                if (sum1 > maxsum)
+                if (currSum <= maxSum)
                 {
-                    result -= 1;
-                    break;
+                    maxCount = Math.Max(maxCount, i + j + 1);
                 }
             }
 
-            if (i != arr2.Count() - 1)
-            {
-                while (sum1 <= maxsum && i <= arr2.Count() - 1)
-                {
-                    sum1 += arr2[i++];
-                    result++;
-                }
-            }
-            if (j != arr3.Count() -1)
-            {
-                while (sum1 <= maxsum && j <= arr3.Count() - 1)
-                {
-                    sum1 += arr3[j++];
-                    result++;
-                }
-            }
-
-
-            return result;
-        
-
+            return maxCount;
         }
 
         //question CoinChange
@@ -355,7 +388,7 @@ namespace GCCWebAPI.ProcessorForAllQuestions
                 var costs = numberarrays[1];
 
                 Console.WriteLine(numberarrays);
-                var result = MaxProfit(0,1,n, costs,m);
+                var result = MaxProfit(n, costs.ToArray());
                 resultSet.Add(result);
             }
 
@@ -366,19 +399,21 @@ namespace GCCWebAPI.ProcessorForAllQuestions
 
         }
 
-        public int MaxProfit(int ind, int start, int cap, List<int> costs, int n)
+        public int MaxProfit(int k, int[] prices)
         {
-            if (ind == n || cap == 0)
-                return 0;
+            int[] buy = Enumerable.Repeat(int.MaxValue, k + 1).ToArray();
+            int[] sell = new int[k + 1];
 
-            if (start == 1)
+            foreach (int p in prices)
             {
-                return Math.Max(-costs[ind] + MaxProfit(ind + 1, 0, cap, costs, n),
-                                 0 + MaxProfit(ind + 1, 1, cap, costs, n));
+                for (int i = 1; i <= k; i++)
+                {
+                    buy[i] = Math.Min(buy[i], p - sell[i - 1]);
+                    sell[i] = Math.Max(sell[i], p - buy[i]);
+                }
             }
 
-            return Math.Max(costs[ind] + MaxProfit(ind + 1, 1, cap - 1, costs, n),
-                             0 + MaxProfit(ind + 1, 0, cap, costs, n));
+            return sell.Last();
         }
 
 
